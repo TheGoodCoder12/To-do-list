@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { DndContext } from '@dnd-kit/core';
 
 const ToDoApp = () => {
     const [task, setTask] = useState("");
@@ -151,17 +152,17 @@ const ToDoApp = () => {
                         </div>
                         {isOpen && (
                             <div
-                                className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="origin-top-right  absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                                 role="menu"
                                 aria-orientation="vertical"
                                 aria-labelledby="menu-button"
                                 tabIndex="-1"
                             >
-                                <div className="py-1" role="none">
+                                <div className="py-1 " role="none">
                                     {options.map((option, index) => (
                                         <button
                                             key={index}
-                                            className="text-gray-700 block w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
+                                            className="text-gray-700 block  w-full px-4 py-2 text-sm text-left hover:bg-gray-100"
                                             role="menuitem"
                                             tabIndex="-1"
                                             onClick={() => handleOptionClick(option)}
@@ -175,35 +176,38 @@ const ToDoApp = () => {
                     </div>
                 </span>
             </div>
-            <div className="todos flex flex-col gap-5">
-                {filteredTasks.map((item, index) => (
-                    <div key={index} className='border rounded-3xl bg-violet-300 border-none mx-10 text-wrap transition-all duration-200 flex justify-center items-center'>
-                        <input
-                            type="checkbox"
-                            className='rounded-full'
-                            checked={item.isCompleted}
-                            onChange={() => handleCheckBox(index)}
-                        />
-                        <div className={`todo text-justify w-4/5 p-2 mr-10 ${item.isCompleted ? "line-through" : ""}`}>
-                            {item.task}
+            <DndContext>
+
+                <div className="todos flex flex-col gap-5">
+                    {filteredTasks.map((item, index) => (
+                        <div key={index} className='border rounded-3xl bg-violet-300 border-none mx-10 text-wrap transition-all duration-200 flex justify-center items-center'>
+                            <input
+                                type="checkbox"
+                                className='rounded-full cursor-pointer'
+                                checked={item.isCompleted}
+                                onChange={() => handleCheckBox(index)}
+                            />
+                            <div className={`todo text-justify w-4/5 p-2 mr-10 ${item.isCompleted ? "line-through" : ""}`}>
+                                {item.task}
+                            </div>
+                            <div className='flex justify-center'>
+                                <button
+                                    className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
+                                    onClick={() => handleEdit(index)}
+                                >
+                                    <FiEdit />
+                                </button>
+                                <button
+                                    className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
+                                    onClick={() => handleDelete(index)}
+                                >
+                                    <MdDelete />
+                                </button>
+                            </div>
                         </div>
-                        <div className='flex justify-center'>
-                            <button
-                                className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
-                                onClick={() => handleEdit(index)}
-                            >
-                                <FiEdit />
-                            </button>
-                            <button
-                                className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
-                                onClick={() => handleDelete(index)}
-                            >
-                                <MdDelete />
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            </DndContext>
         </div>
     );
 };
