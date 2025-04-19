@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { DndContext } from '@dnd-kit/core';
+import { FcMultipleInputs } from "react-icons/fc";
 
 const ToDoApp = () => {
     const [task, setTask] = useState("");
@@ -102,17 +103,21 @@ const ToDoApp = () => {
 
     return (
         <div className='bg-violet-500 w-2/3 my-auto h-screen flex flex-col gap-10 overflow-y-auto'>
-            <div className='text-5xl italic text-white justify-center flex flex-col items-center mt-20'>
-                Today's tasks
+            
+            {/* Heading */}
+            <div className='text-6xl font-bold italic text-white justify-center flex flex-col items-center mt-20' style={{ fontFamily: "Indie Flower" }}>
+                Today's Tasks
             </div>
+                
             <div className='todo flex justify-between items-center border rounded-3xl bg-violet-300 p-6 h-3 mx-10 text-wrap cursor-pointer transition-all duration-200'>
                 <input
-                    className='w-full m-2 focus:outline-none'
+                    className='w-full m-2 focus:outline-none text-xl'
                     placeholder='Add a task...'
                     type="text"
                     value={task}
                     onChange={handleChange}
-                    onKeyDown={handleKeyPress} // Add Enter key functionality
+                    onKeyDown={handleKeyPress}
+                    style={{ fontFamily: "Caveat" }}
                 />
                 <button
                     className='bg-gray-200 rounded-md p-1.5 cursor-pointer hover:scale-105'
@@ -122,7 +127,7 @@ const ToDoApp = () => {
                 </button>
             </div>
             <div className='text-white text-2xl mx-10 italic flex justify-between underline'>
-                <span>Your tasks</span>
+                <span className='text-3xl font-bold' style={{ fontFamily: "Indie Flower" }}>Your tasks</span>
                 <span>
                     <div className="relative inline-block text-left">
                         <div>
@@ -178,25 +183,34 @@ const ToDoApp = () => {
             </div>
             <DndContext>
 
-                <div className="todos flex flex-col gap-5">
+                <div className="flex flex-col gap-5">
                     {filteredTasks.map((item, index) => (
                         <div key={index} className='border rounded-3xl bg-violet-300 border-none mx-10 text-wrap transition-all duration-200 flex justify-center items-center'>
                             <input
                                 type="checkbox"
-                                className='rounded-full cursor-pointer'
+                                className='rounded-full cursor-pointer ml-5.5'
                                 checked={item.isCompleted}
                                 onChange={() => handleCheckBox(index)}
                             />
-                            <div className={`todo text-justify w-4/5 p-2 mr-10 ${item.isCompleted ? "line-through" : ""}`}>
+                            <div className={`todo text-justify w-4/5 p-2 text-2xl mr-10 ${item.isCompleted ? "line-through" : ""}`} style={{ fontFamily: "Caveat" }}>
                                 {item.task}
                             </div>
-                            <div className='flex justify-center'>
+                            <div className='flex justify-center mr-2.5'>
+                                {/* Subtask btn */}
+                                <button
+                                    className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
+                                    onClick={() => handleExpand(index)}
+                                >
+                                    <FcMultipleInputs />
+                                </button>
+                                {/* Edit btn */}
                                 <button
                                     className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
                                     onClick={() => handleEdit(index)}
                                 >
                                     <FiEdit />
                                 </button>
+                                {/* Delete btn */}
                                 <button
                                     className='p-2 hover:scale-105 cursor-pointer rounded-md border-none bg-white text-black m-2'
                                     onClick={() => handleDelete(index)}
