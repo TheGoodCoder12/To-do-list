@@ -3,10 +3,12 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { DndContext } from '@dnd-kit/core';
 import { FcMultipleInputs } from "react-icons/fc";
+import { GiHamburgerMenu } from 'react-icons/gi';
 
 const ToDoApp = () => {
     const [task, setTask] = useState("");
     const [tasksArray, setTasksArray] = useState([]);
+    const [open, setOpen] = useState(false);
 
     // Load tasks from localStorage on initial render
     useEffect(() => {
@@ -102,13 +104,35 @@ const ToDoApp = () => {
     });
 
     return (
-        <div className='bg-violet-500 w-2/3 my-auto h-screen flex flex-col gap-10 overflow-y-auto'>
-            
+        <div className='w-full bg-violet-500 my-auto h-screen flex flex-col gap-10 overflow-y-auto'>
+            {/* expandable section on mobile */}
+            <div className='2xl:hidden w-full'>
+                {/* Top Bar */}
+                <div className='bg-violet-600 text-white p-4 flex justify-between items-center z-10'>
+                    <h1 className='text-xl font-bold' style={{ fontFamily: "Indie flower" }}>Options</h1>
+                    <button onClick={() => setOpen(!open)}>
+                        <GiHamburgerMenu className='text-2xl' />
+                    </button>
+                </div>
+
+                {/* Expandable Menu */}
+                <div className={`absolute top-16 left-0 w-full transition-all duration-300 ease-in-out bg-violet-200 text-black shadow-md z-20 font-[Caveat] ${open ? 'opacity-100 scale-y-100 visible' : 'opacity-0 scale-y-0 invisible'
+                    }`} style={{ transformOrigin: 'top' }}>
+                    <button className='py-2 px-4 hover:bg-violet-300 text-left w-full transition-all'>Dashboard</button>
+                    <button className='py-2 px-4 hover:bg-violet-300 text-left w-full transition-all'>Settings</button>
+                    <button className='py-2 px-4 hover:bg-violet-300 text-left w-full transition-all'>AI</button>
+                </div>
+
+
+            </div>
+
+
             {/* Heading */}
-            <div className='text-6xl font-bold italic text-white justify-center flex flex-col items-center mt-20' style={{ fontFamily: "Indie Flower" }}>
+            <div className='text-5xl sm:text-6xl mt-0.5 sm:mt-20 font-bold italic text-white justify-center flex flex-col items-center ' style={{ fontFamily: "Indie Flower" }}>
                 Today's Tasks
             </div>
-                
+
+            {/* Add a task */}
             <div className='todo flex justify-between items-center border rounded-3xl bg-violet-300 p-6 h-3 mx-10 text-wrap cursor-pointer transition-all duration-200'>
                 <input
                     className='w-full m-2 focus:outline-none text-xl'
@@ -126,8 +150,9 @@ const ToDoApp = () => {
                     Add
                 </button>
             </div>
-            <div className='text-white text-2xl mx-10 italic flex justify-between underline'>
-                <span className='text-3xl font-bold' style={{ fontFamily: "Indie Flower" }}>Your tasks</span>
+            
+            <div className='flex-col-reverse items-center sm:flex-row text-white text-2xl mx-10 italic flex justify-between underline flex-wrap'>
+                <span className='text-3xl font-bold mr-2 mt-5' style={{ fontFamily: "Indie Flower" }}>Your tasks</span>
                 <span>
                     <div className="relative inline-block text-left">
                         <div>
@@ -185,14 +210,15 @@ const ToDoApp = () => {
 
                 <div className="flex flex-col gap-5">
                     {filteredTasks.map((item, index) => (
-                        <div key={index} className='border rounded-3xl bg-violet-300 border-none mx-10 text-wrap transition-all duration-200 flex justify-center items-center'>
+                        <div key={index} className='border rounded-3xl overflow-auto bg-violet-300 border-none mx-10 text-wrap transition-all duration-200 flex justify-center items-center'>
                             <input
                                 type="checkbox"
                                 className='rounded-full cursor-pointer ml-5.5'
                                 checked={item.isCompleted}
                                 onChange={() => handleCheckBox(index)}
                             />
-                            <div className={`todo text-justify w-4/5 p-2 text-2xl mr-10 ${item.isCompleted ? "line-through" : ""}`} style={{ fontFamily: "Caveat" }}>
+                            <div className={`text-justify flex-1 m-2 text-lg sm:text-2xl ${item.isCompleted ? "line-through" : ""}`} style={{ fontFamily: "Caveat" }}>
+
                                 {item.task}
                             </div>
                             <div className='flex justify-center mr-2.5'>
